@@ -32,23 +32,25 @@ public void onEnable(){
 	 
 	getServer().addRecipe(Quarry);
 	//Path marker
-	ItemStack Path_marker = new ItemStack(Material.SKULL, 1);
+	ItemStack Path_marker = new ItemStack(Material.DIRT, 2);
 	
 	ShapedRecipe Marker = new ShapedRecipe(Path_marker);
 	
-	Marker.shape("TTT",
-			 	 "LLL",
-			 	 "TTT");
+	Marker.shape("RRR",
+			 	 "SLS",
+			 	 "TRT");
 	Marker.setIngredient('T', Material.REDSTONE_TORCH_ON);
 	Marker.setIngredient('L', Material.LAPIS_BLOCK);
+	Marker.setIngredient('R', Material.REDSTONE);
+	Marker.setIngredient('S', Material.STONE);
 	
 	getServer().addRecipe(Marker);
 PluginDescriptionFile pdffile = this.getDescription();
-this.logger.info(pdffile.getName() + "has been enabled");
+this.logger.info(pdffile.getName() + " has been enabled");
 }
 public void onDisable(){
 	PluginDescriptionFile pdffile = this.getDescription();
-	this.logger.info(pdffile.getName() + "has been disabled");	
+	this.logger.info(pdffile.getName() + " has been disabled");	
 }
 
 }
