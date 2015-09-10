@@ -2,6 +2,6 @@ name: Quarry
 description: uses default minecraft to add a Quarry
 author: wezerds
 website: http://cyber-control.com/
-commands:
 version: 1.0
 main: me.cybercontroll.Quarry.Quarrymain
+commands:

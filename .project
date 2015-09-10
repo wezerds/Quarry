@@ -3,6 +3,7 @@
 	<name>Quarry</name>
 	<comment></comment>
 	<projects>
+		<project>WizBizPlugin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
