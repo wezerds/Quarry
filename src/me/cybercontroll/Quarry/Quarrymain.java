@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -12,16 +14,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Quarrymain extends JavaPlugin {
-public final Logger logger = Logger.getLogger("Minecraft");
-
-
-	public void onEnable() {
 	
-	addRecipes();
-	Logger.getLogger("Minecraft").info("Quarry has been enabled");
+	public final Logger logger = Logger.getLogger("Minecraft");
+	static FileConfiguration config;
+	
+	public void onEnable() {
+		config = new YamlConfiguration();
+		loadConfig();
+		addRecipes();
+		Logger.getLogger("Minecraft").info("Quarry has been enabled");
 	}
 
 	public void onDisable() {
+		getServer().clearRecipes();
 		Logger.getLogger("Minecraft").info("Quarry has been disabled");
 	}
 	/**
@@ -78,5 +83,9 @@ public final Logger logger = Logger.getLogger("Minecraft");
 		getServer().addRecipe(Quarry);
 		getServer().addRecipe(Marker);
 	}
-
+	
+	public void loadConfig() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+	}
 }
