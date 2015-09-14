@@ -1,7 +1,5 @@
 package me.cybercontroll.Quarry;
 
-import net.md_5.bungee.api.ChatColor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,23 +8,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Quarrymain extends JavaPlugin {
 
+	static Plugin plugin = Bukkit.getPluginManager().getPlugin("Quarry");
 	static FileConfiguration config;
-	final static Plugin plugin = Bukkit.getPluginManager().getPlugin("Quarry");
 	
 	public void onEnable() {
+		plugin = Bukkit.getPluginManager().getPlugin("Quarry");
 		config = new YamlConfiguration();
-		registerAllEvents(this, new BlockPlacementHandler());
+		registerAllEvents(this, new BlockPlacementHandler(), new ClickHandler());
 		loadConfig();
 		addRecipes();
 	}
 
 	public void onDisable() {
+		
 		getServer().clearRecipes();
 	}
 	/**
@@ -35,10 +34,7 @@ public class Quarrymain extends JavaPlugin {
 	@SuppressWarnings("deprecation")
 	public void addRecipes() {
 		//Quarry
-		ItemStack QuarryBlock = new ItemStack(Material.BEDROCK);
-		ItemMeta quarryim = QuarryBlock.getItemMeta();
-		quarryim.setDisplayName(ChatColor.RED.toString() + "Quarry");
-		QuarryBlock.setItemMeta(quarryim);
+		ItemStack QuarryBlock = Helper.item(Material.BEDROCK, Helper.red + "Quarry");
 		ShapedRecipe Quarry = new ShapedRecipe(QuarryBlock);
 		
 		Quarry.shape("DOD",
@@ -54,10 +50,7 @@ public class Quarrymain extends JavaPlugin {
 		Quarry.setIngredient('C', Material.CHEST);
 		 
 		//Path Marker
-		ItemStack marker = new ItemStack(Material.REDSTONE_TORCH_ON);
-		ItemMeta markerim = marker.getItemMeta();
-		markerim.setDisplayName(ChatColor.RED.toString() + "Path Marker");
-		marker.setItemMeta(markerim);
+		ItemStack marker = Helper.item(Material.BEDROCK, Helper.red + "Path Marker");
 		ShapedRecipe Marker = new ShapedRecipe(marker);
 		
 		Marker.shape("L",
@@ -67,10 +60,7 @@ public class Quarrymain extends JavaPlugin {
 		Marker.setIngredient('T', Material.REDSTONE_TORCH_ON);
 		
 		//Drill Bit
-		ItemStack drill = new ItemStack(Material.PRISMARINE_SHARD);
-		ItemMeta drillim = drill.getItemMeta();
-		drillim.setDisplayName(ChatColor.RED.toString() + "Drill Bit");
-		drill.setItemMeta(drillim);
+		ItemStack drill = Helper.item(Material.PRISMARINE_SHARD, Helper.red + "Drill Bit");
 		ShapelessRecipe DrillBit = new ShapelessRecipe(drill);
 		
 		DrillBit.addIngredient(Material.WOOD_PICKAXE)
@@ -86,7 +76,7 @@ public class Quarrymain extends JavaPlugin {
 
 	public void loadConfig() {
 		getConfig().options().copyDefaults(true);
-		saveConfig();
+		saveDefaultConfig();
 	}
 	
 	public void registerAllEvents(org.bukkit.plugin.Plugin plugin, Listener... listeners) {
