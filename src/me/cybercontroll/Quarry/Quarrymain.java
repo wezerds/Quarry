@@ -1,33 +1,38 @@
 package me.cybercontroll.Quarry;
 
-import java.util.logging.Logger;
-
-import net.md_5.bungee.api.ChatColor;
-
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Quarrymain extends JavaPlugin {
-	
-	public final Logger logger = Logger.getLogger("Minecraft");
+
+	static Plugin plugin = Bukkit.getPluginManager().getPlugin("Quarry");
 	static FileConfiguration config;
 	
 	public void onEnable() {
+		plugin = Bukkit.getPluginManager().getPlugin("Quarry");
 		config = new YamlConfiguration();
+		int max = plugin.getConfig().getInt("Max quarry size");
+		if(max < 5 || max > 60)
+			Helper.warn("Max quarry size of " + max + " is not valid: must be 5-60");
+		else
+			Helper.log("Max quarry size of " + max + " successfully loaded");
+		//Add EventHandlers here to register them
+		registerAllEvents(this, new BlockPlacementHandler(), new ClickHandler(), new DestroyEventHandler());
 		loadConfig();
 		addRecipes();
-		Logger.getLogger("Minecraft").info("Quarry has been enabled");
 	}
 
 	public void onDisable() {
+		
 		getServer().clearRecipes();
-		Logger.getLogger("Minecraft").info("Quarry has been disabled");
 	}
 	/**
 	 * Adds all the recipes from the Quarry plugin
@@ -35,10 +40,7 @@ public class Quarrymain extends JavaPlugin {
 	@SuppressWarnings("deprecation")
 	public void addRecipes() {
 		//Quarry
-		ItemStack QuarryBlock = new ItemStack(Material.BEDROCK);
-		ItemMeta quarryim = QuarryBlock.getItemMeta();
-		quarryim.setDisplayName(ChatColor.RED.toString() + "Quarry");
-		QuarryBlock.setItemMeta(quarryim);
+		ItemStack QuarryBlock = Helper.item(Material.BEDROCK, Helper.red + "Quarry");
 		ShapedRecipe Quarry = new ShapedRecipe(QuarryBlock);
 		
 		Quarry.shape("DOD",
@@ -48,16 +50,13 @@ public class Quarrymain extends JavaPlugin {
 		Quarry.setIngredient('D', Material.DIAMOND);
 		Quarry.setIngredient('O', Material.OBSIDIAN );
 		Quarry.setIngredient('F', Material.FURNACE);
-		//DRILL BIT (will be checked in craftItemEvent)
+		//DRILL BIT
 		Quarry.setIngredient('S', Material.PRISMARINE_SHARD);
 		Quarry.setIngredient('T', Material.REDSTONE_TORCH_ON);
 		Quarry.setIngredient('C', Material.CHEST);
 		 
 		//Path Marker
-		ItemStack marker = new ItemStack(Material.REDSTONE_TORCH_ON);
-		ItemMeta markerim = marker.getItemMeta();
-		markerim.setDisplayName(ChatColor.RED.toString() + "Path Marker");
-		marker.setItemMeta(markerim);
+		ItemStack marker = Helper.item(Material.REDSTONE_TORCH_ON, Helper.red + "Path Marker");
 		ShapedRecipe Marker = new ShapedRecipe(marker);
 		
 		Marker.shape("L",
@@ -67,10 +66,7 @@ public class Quarrymain extends JavaPlugin {
 		Marker.setIngredient('T', Material.REDSTONE_TORCH_ON);
 		
 		//Drill Bit
-		ItemStack drill = new ItemStack(Material.PRISMARINE_SHARD);
-		ItemMeta drillim = drill.getItemMeta();
-		drillim.setDisplayName(ChatColor.RED.toString() + "Drill Bit");
-		drill.setItemMeta(drillim);
+		ItemStack drill = Helper.item(Material.PRISMARINE_SHARD, Helper.red + "Drill Bit");
 		ShapelessRecipe DrillBit = new ShapelessRecipe(drill);
 		
 		DrillBit.addIngredient(Material.WOOD_PICKAXE)
@@ -83,9 +79,15 @@ public class Quarrymain extends JavaPlugin {
 		getServer().addRecipe(Quarry);
 		getServer().addRecipe(Marker);
 	}
-	
+
 	public void loadConfig() {
 		getConfig().options().copyDefaults(true);
-		saveConfig();
+		saveDefaultConfig();
 	}
+	
+	public void registerAllEvents(org.bukkit.plugin.Plugin plugin, Listener... listeners) {
+		for (Listener listener : listeners) {
+			Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+			}
+		}
 }
