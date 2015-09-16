@@ -45,11 +45,14 @@ public class ClickHandler implements Listener {
 							break;
 					}
 					if(foundCorners) {
-						Location[] corners = {torch1, new Location(world, torch1.getBlockX(), yLevel, torch2.getBlockZ()) , torch2, new Location(world, torch2.getBlockX(), yLevel, torch1.getBlockZ())};
-						player.setMetadata("QuarryCorner0", Helper.meta(corners[0].toString()));
-						player.setMetadata("QuarryCorner1", Helper.meta(corners[1].toString()));
-						player.setMetadata("QuarryCorner2", Helper.meta(corners[2].toString()));
-						player.setMetadata("QuarryCorner3", Helper.meta(corners[3].toString()));
+						Location cross1 = new Location(world, torch1.getBlockX(), yLevel, torch2.getBlockZ());
+						Location cross2 = new Location(world, torch2.getBlockX(), yLevel, torch1.getBlockZ());
+						Location[] org = Helper.organizeXZ(torch1, torch2, cross1, cross2);
+						TorchTask.torchPairs.add(Helper.organizeXZ(torch1, torch2));
+						Location l = org[0], g = org[1];
+						cross1 = new Location(world, l.getBlockX(), yLevel, g.getBlockZ());
+						cross2 = new Location(world, g.getBlockX(), yLevel, l.getBlockZ());
+						Location[] corners = {l, cross1 , g, cross2};
 						TorchTask task = new TorchTask(corners);
 						task.getCorners();
 					}
@@ -69,6 +72,8 @@ public class ClickHandler implements Listener {
 						options.setContents(contents);
 						player.openInventory(options);
 					}
+					else
+						player.sendMessage(Helper.red + "[Quarry]: You are not allowed to edit this quarry");
 				}
 			}
 		}
@@ -76,7 +81,7 @@ public class ClickHandler implements Listener {
 	
 	public boolean checkBlock(Location loc) {
 		Block block = loc.getBlock();
-		if(block.hasMetadata("QuarryBlockType") && block.getType().equals(Material.REDSTONE_TORCH_ON)) {
+		if(Helper.getString(block, "QuarryBlockType").equals("marker") && block.getType().equals(Material.REDSTONE_TORCH_ON)) {
 			return true;
 		}
 		return false;

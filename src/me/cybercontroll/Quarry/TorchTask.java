@@ -11,9 +11,9 @@ import org.bukkit.World;
 public class TorchTask {
 	
 	Location[] corners;
-	static ArrayList<Location[]> cornersList = new ArrayList<Location[]>();
-	static ArrayList<Location[]> torchPairs = new ArrayList<Location[]>();
-	static int instance;
+	public static ArrayList<Location[]> cornersList = new ArrayList<Location[]>();
+	public static ArrayList<Location[]> torchPairs = new ArrayList<Location[]>();
+	public static int instance;
 	
 	public TorchTask(Location[] corners) {
 		this.corners = corners;

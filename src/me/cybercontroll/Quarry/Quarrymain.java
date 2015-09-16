@@ -19,7 +19,13 @@ public class Quarrymain extends JavaPlugin {
 	public void onEnable() {
 		plugin = Bukkit.getPluginManager().getPlugin("Quarry");
 		config = new YamlConfiguration();
-		registerAllEvents(this, new BlockPlacementHandler(), new ClickHandler());
+		int max = plugin.getConfig().getInt("Max quarry size");
+		if(max < 5 || max > 60)
+			Helper.warn("Max quarry size of " + max + " is not valid: must be 5-60");
+		else
+			Helper.log("Max quarry size of " + max + " successfully loaded");
+		//Add EventHandlers here to register them
+		registerAllEvents(this, new BlockPlacementHandler(), new ClickHandler(), new DestroyEventHandler());
 		loadConfig();
 		addRecipes();
 	}
@@ -50,7 +56,7 @@ public class Quarrymain extends JavaPlugin {
 		Quarry.setIngredient('C', Material.CHEST);
 		 
 		//Path Marker
-		ItemStack marker = Helper.item(Material.BEDROCK, Helper.red + "Path Marker");
+		ItemStack marker = Helper.item(Material.REDSTONE_TORCH_ON, Helper.red + "Path Marker");
 		ShapedRecipe Marker = new ShapedRecipe(marker);
 		
 		Marker.shape("L",
