@@ -4,9 +4,9 @@ Quarry is a CraftBukkit plugin that allows you to create a Quarry that lets you 
 **As a player, you can:**
 
 * Create a Quarry that mines a 35 by 35.
-* place it where ever you want.
-* afk and it mine for you.
-* add silk touch and Fortune upgrades.
-* items are automatically placed in a nearby block inventory.
-* use what ever you want to fuel.
-* other players can refuel for you if you're gone.
+* Place it where ever you want.
+* Afk and it mine for you.
+* Add silk touch and Fortune upgrades.
+* Items are automatically placed in a nearby block inventory.
+* Use what ever you want to fuel.
+* Other players can refuel for you if you're gone.
